@@ -2,10 +2,11 @@ var pModel = function(){
 
 	var leftStack = [];
 	var rightStatck = [];
-	this.getPlaces = function (template){
+	this.applyTemplate = function (template, parameters = null){
 		var state = 0;
 		var tmpWord = [];
 		var places = [];
+		var filled = [];
 		for(var c of template){
 			if(c == '{'){
 				if(!state){
@@ -22,37 +23,39 @@ var pModel = function(){
 				if(state){
 					tmpWord[tmpWord.length] = c;
 				}else{
-					//ingore;
+				 	filled[filled.length] = c;
 				}
 			}
 			else{
 				if(state){
 					leftStack.pop();
 					state = false;
-					places[places.length] = tmpWord.join('');
+					var parameterKey = tmpWord.join('');
+					places[places.length] = parameterKey;
+					console.log(parameterKey);
+					for(var v of parameters[parameterKey].toString()){
+						filled[filled.length] = v;
+					}
 					tmpWord = [];
 					continue;
 				}else{
-					//ingore;
+					filled[filled.length] = c;
 				}
 			}
 		}
-		return places;
-        }
+		return {places:places, result: filled.join('')};
+        };
 
 };
 
 var root  = function (){
 
-	this.fullfil = function (template, paramters){
+	this.fullfil = function (template, parameters){
 		
-		
+		var p = new pModel();
+		return p.applyTemplate(template, parameters);
 	};
 
-	this.testTemplate = function(template){
-		var p = new pModel();
-		return p.getPlaces(template);
-	};
 };
 
 module.exports = root;
