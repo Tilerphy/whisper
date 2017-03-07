@@ -51,7 +51,7 @@ var pModel = function(){
 var root  = function (){
 
 	this.fullfil = function (template, parameters){
-		
+		console.log(template);
 		var p = new pModel();
 		return p.applyTemplate(template, parameters);
 	};
