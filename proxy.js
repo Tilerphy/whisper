@@ -1,6 +1,6 @@
 var proxy = function(){
 
-	this.send = function(mode, method, endpoint, template, parameters){
+	this.send = function(mode, method, endpoint, template, parameters, headers){
 
 		
 		switch (mode){
@@ -16,7 +16,7 @@ var proxy = function(){
 						host: endpoint,
 						method: method,
 						path:path,
-						headers:{}		
+						headers:headers
 					};	
 					var result = "";
 					var req = http.request(opt, (res)=>{
@@ -51,6 +51,11 @@ var proxy = function(){
       							'Content-Length': postData.length
 						}
 					};
+					if(headers){
+						for(var key in headers){
+							opt.headers[key] = headers[key];
+						}
+					}
 					var result = "";
 					var req = http.request(opt, (res)=>{
 						res.on("data", (data)=>{
@@ -78,9 +83,9 @@ var proxy = function(){
 		var app = express();
 		var server = http.createServer(app);
 		app.use("/1", (req, res, next)=>{
-			console.log(req.path);
+			console.log(req.query["parameters"]);
 			
-			this.send(1, "get",req.query["site"], req.query["template"],req.query["paramters"])
+			this.send(1, "get",req.query["site"], req.query["template"],JSON.parse(req.query["parameters"]))
 			.then((result)=>{
 				res.end(result);
 			});	
