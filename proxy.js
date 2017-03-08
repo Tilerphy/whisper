@@ -85,7 +85,7 @@ var proxy = function(){
 		app.use("/1", (req, res, next)=>{
 			console.log(req.query["parameters"]);
 			
-			this.send(1, "get",req.query["site"], req.query["template"],JSON.parse(req.query["parameters"]))
+			this.send(1, "get",req.query["site"], req.query["template"],JSON.parse(req.query["parameters"]), JSON.parse(req.query["headers"]))
 			.then((result)=>{
 				res.end(result);
 			});	
@@ -102,7 +102,7 @@ var proxy = function(){
 			});
 			req.on("end", ()=>{
 				var postDataInstance = JSON.parse(postData);
-				this.send(2, "post", req.query["site"], postDataInstance["template"], postDataInstance["parameters"])
+				this.send(2, "post", req.query["site"], postDataInstance["template"], postDataInstance["parameters"], postDataInstance["headers"])
 				.then((result)=>{
 					res.end(result);
 				});
