@@ -1,0 +1,7 @@
+{{
+	"method": "get",
+	"site": "www.psnine.com",
+	"path": "/{area}/{id}",
+	"headers":"{{'Cookie':'{cookie}'}}",
+	"content":"abc"
+}}

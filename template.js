@@ -3,20 +3,19 @@ var pModel = function(){
 	var leftStack = [];
 	var rightStatck = [];
 	this.applyTemplate = function (template, parameters = null){
-		var state = 0;
+		var state = false;
 		var tmpWord = [];
 		var places = [];
 		var filled = [];
 		for(var c of template){
 			if(c == '{'){
-				if(!state){
+				state = !state;
+				if(state){
 					leftStack.push(c);
-					state = true;
 					continue;
 				}
 				else{
-					console.log("wrong template: nest {}.");
-					return false;
+					filled[filled.length] =c;
 				}
 			}
 			else if(c != '}'){
@@ -27,18 +26,21 @@ var pModel = function(){
 				}
 			}
 			else{
-				if(state){
-					leftStack.pop();
-					state = false;
+				state=!state;
+				if(!state){
+					var hasLeft = leftStack.pop();
 					var parameterKey = tmpWord.join('');
 					places[places.length] = parameterKey;
-					console.log(parameterKey);
-					for(var v of parameters[parameterKey].toString()){
-						filled[filled.length] = v;
+					console.log(hasLeft);
+					if(hasLeft && tmpWord.length > 0 ){
+						for(var v of parameters[parameterKey] ? parameters[parameterKey].toString() : "undefined"){
+							filled[filled.length] = v;
+						}
 					}
 					tmpWord = [];
 					continue;
 				}else{
+				
 					filled[filled.length] = c;
 				}
 			}
