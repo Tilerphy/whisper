@@ -3,10 +3,14 @@ var pModel = function(){
 	var leftStack = [];
 	var rightStatck = [];
 	this.applyTemplate = function (template, parameters = null){
+		
 		var state = false;
 		var tmpWord = [];
 		var places = [];
 		var filled = [];
+		if(template == null || template == "" || parameters == null || parameters.length == 0){
+			return {places:places, result:template};
+		}
 		for(var c of template){
 			if(c == '{'){
 				state = !state;
