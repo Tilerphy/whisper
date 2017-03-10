@@ -3,12 +3,12 @@ var proxy = function(){
 
 	this.send = function(mode, method, endpoint, template, parameters, headers){
 
-		
+		var http = template.ssl? require("https"):require("http");
 		switch (mode){
 
 			case 1:
 				return  new Promise((resolve, reject)=>{
-					var http = require("http");
+					var http = template.ssl? require("https"): require("http");
 					var xt = require("./template");
 					var instance = new xt();
 					var path = instance.fullfil(template, parameters).result;
@@ -17,6 +17,7 @@ var proxy = function(){
 						host: endpoint,
 						method: method,
 						path:path,
+						rejectUnauthorized:false,
 						headers:headers
 					};	
 					var result = "";
@@ -38,7 +39,6 @@ var proxy = function(){
 				break;
 			case 2:
 				return new Promise((resolve, reject)=>{
-					var http = require("http");
 					var xt = require("./template");
 					var instance = new xt();
 					var path = instance.fullfil(template["path"], parameters["path"]).result;
@@ -47,6 +47,7 @@ var proxy = function(){
 						host:endpoint,
 						method: method,
 						path: path,
+						rejectUnauthorized:false,
 						headers:{
 							'Content-Type': 'application/x-www-form-urlencoded',
       							'Content-Length': postData.length
@@ -77,9 +78,9 @@ var proxy = function(){
 				return new Promise((resolve, reject)=>{
 					var xt = require("./template");
 					var instance = new xt();
-					var http = require("http");
 					var opt = {
 						host: endpoint,
+						rejectUnauthorized:false,
 						method: method,
 						path: instance.fullfil(template["path"], parameters["path"]).result
 					};

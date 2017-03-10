@@ -1,5 +1,6 @@
 {
 	"method": "get",
+	"ssl":false,
 	"site": "www.psnine.com",
 	"path": "/{area}/{id}"
 }

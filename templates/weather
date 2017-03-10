@@ -1,0 +1,6 @@
+{
+	"method": "get",
+	"ssl":false,
+	"site": "www.weather.com.cn",
+	"path": "/data/sk/{tid}.html"
+}
