@@ -85,7 +85,8 @@ var proxy = function(){
 						path: instance.fullfil(template["path"], parameters["path"]).result
 					};
 					if(template["headers"]){
-						opt.headers= JSON.parse(instance.fullfil(template["headers"], parameters["headers"]).result);
+						var hs = instance.fullfil(template["headers"], parameters["headers"]);
+						opt.headers= hs.result;
 					}
 					var result = "";
 					console.log(opt.path);
@@ -186,11 +187,11 @@ var proxy = function(){
 			
 		app.use("/3/:template", (req, res, next)=>{
 			
-			console.log(JSON.stringify(req.params.template));
+			console.log(JSON.stringify(req.params.template)+"##");
 			var templatePath = "./templates/"+req.params.template;
 			var postContent = "";
+					
 			var queryParams = JSON.parse(req.query["parameters"].toString());
-			var queryKeys = Object.keys(queryParams);
 			req.on("data", (pData)=>{
 				postContent += pData.toString();
 			}).on("end", ()=>{
@@ -201,14 +202,8 @@ var proxy = function(){
                                        	}else{
                                                	fs.readFile(templatePath, "utf8", (err, data)=>{
                                                        	var templateData = JSON.parse(data);
-							var postData = postContent? JSON.parse(postContent):{};
-							if(postData.path == null){
-								postData.path = {};
-							}
-							for(var k of queryKeys){
-								
-								postData.path[k] = queryParams[k];
-							}
+							//POST FIRST
+							var postData = postContent? JSON.parse(postContent):queryParams;
 							if(req.method.toUpperCase() == templateData.method.toUpperCase()){		
                                                        		this.send(3, templateData.method, templateData.site, templateData, postData)
                                                        		.then((r)=>{
@@ -216,6 +211,7 @@ var proxy = function(){
 				                               		for(var k of headerNames){
                                         					res.header(k, r.response.headers[k]);
                                						}
+									res.status(r.response.statusCode);
                                						res.end(r.result);
 
                                                        		}).catch((ex)=>{

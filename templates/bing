@@ -1,0 +1,6 @@
+{
+	"method": "get",
+	"ssl": true,
+	"site": "cn.bing.com",
+	"path": "/search?q={search}"
+}
