@@ -156,7 +156,11 @@ var proxy = function(){
 				for(var k of headerNames){
 					res.header(k, r.response.headers[k]);
 				}
+				res.status(r.response.statusCode);
 				res.end(r.result);
+			}).catch((ex)=>{
+				res.status(400);
+				res.end(ex.toString());
 			});	
 		
 			
@@ -177,8 +181,12 @@ var proxy = function(){
                                 	for(var k of headerNames){
                                         	res.header(k, r.response.headers[k]);
                                 	}
+					res.status(r.response.statusCode);
                                 	res.end(r.result);
 
+				}).catch((ex)=>{
+					res.status(400);
+					res.end(ex.toString());
 				});
 
 			});
@@ -215,7 +223,9 @@ var proxy = function(){
                                						res.end(r.result);
 
                                                        		}).catch((ex)=>{
-									console.log(ex.message);
+									res.status(400);
+									console.log(ex.toString());
+									res.end(ex.toString());
 								});
 							}else{
 								res.status(400);
