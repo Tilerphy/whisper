@@ -33,10 +33,10 @@ var pModel = function(){
 				state=!state;
 				if(!state){
 					var hasLeft = leftStack.pop();
-					var parameterKey = tmpWord.join('');
-					places[places.length] = parameterKey;
-					console.log(hasLeft);
+					
 					if(hasLeft && tmpWord.length > 0 ){
+						var parameterKey = tmpWord.join('');
+						places[places.length] = parameterKey;
 						for(var v of parameters[parameterKey] ? parameters[parameterKey].toString() : "undefined"){
 							filled[filled.length] = v;
 						}
