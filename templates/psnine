@@ -2,6 +2,7 @@
 	"method": "get",
 	"site": "www.psnine.com",
 	"path": "/{area}/{id}",
+	//{{key}} => "{key}"
 	"headers":"{{'Cookie':'{cookie}'}}",
 	"content":"abc"
 }}
